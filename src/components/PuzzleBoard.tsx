@@ -433,25 +433,20 @@ interface PuzzleBoardProps {
  * enjoyable.
  */
 const PuzzleBoard = ({ pieces, originalImage, originalPieces }: PuzzleBoardProps) => {
-  // State management
-  const [currentPieces, setCurrentPieces] = useState<string[]>(pieces)
-  const [isComplete, setIsComplete] = useState(false)
+  const [currentPieces, setCurrentPieces] = useState(pieces)
   const [draggedPiece, setDraggedPiece] = useState<number | null>(null)
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [correctPieces, setCorrectPieces] = useState<boolean[]>(Array(pieces.length).fill(false))
   const [showVerification, setShowVerification] = useState(false)
   const [showHints, setShowHints] = useState(false)
-  const [correctPieces, setCorrectPieces] = useState<boolean[]>([])
   const [moves, setMoves] = useState(0)
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null)
-  const hintsRef = useRef<HTMLDivElement>(null)
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null)
 
   // Reset game state when pieces change
   useEffect(() => {
     setCurrentPieces(pieces)
-    setIsComplete(false)
-    setShowVerification(false)
-    setShowHints(false)
     setCorrectPieces(new Array(pieces.length).fill(false))
     setMoves(0)
     setGameStartTime(new Date())
@@ -504,7 +499,6 @@ const PuzzleBoard = ({ pieces, originalImage, originalPieces }: PuzzleBoardProps
     const newCorrectPieces = pieces.map((piece, i) => piece === originalPieces[i])
     setCorrectPieces(newCorrectPieces)
     const complete = newCorrectPieces.every(isCorrect => isCorrect)
-    setIsComplete(complete)
     
     if (complete && gameStartTime) {
       const endTime = new Date()
@@ -515,9 +509,6 @@ const PuzzleBoard = ({ pieces, originalImage, originalPieces }: PuzzleBoardProps
 
   const resetPuzzle = () => {
     setCurrentPieces(pieces)
-    setIsComplete(false)
-    setShowVerification(false)
-    setShowHints(false)
     setCorrectPieces(new Array(pieces.length).fill(false))
     setMoves(0)
     setGameStartTime(new Date())
@@ -534,7 +525,6 @@ const PuzzleBoard = ({ pieces, originalImage, originalPieces }: PuzzleBoardProps
     // Update state with the new correct pieces
     setCorrectPieces(newCorrectPieces)
     const complete = newCorrectPieces.every(isCorrect => isCorrect)
-    setIsComplete(complete)
     
     // Set modal content with the accurate count
     const content = complete ? (
