@@ -1,6 +1,55 @@
-# Image Puzzle Game
+# PuzzlePix - Interactive Image Puzzle Game
 
-A fun and interactive puzzle game where you can upload any image and solve it by arranging the pieces in the correct order.
+A modern, interactive puzzle game created by Vikas Goyal where users can upload their own images and solve them as puzzles.
+
+## Features
+
+- Drag-and-drop puzzle interface
+- Custom image upload support
+- Progress tracking
+- Hint system
+- Responsive design
+- Modern UI with smooth animations
+
+## Development
+
+To run the project locally:
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## Deployment
+
+This project is deployed on Netlify. To deploy your own instance:
+
+1. Fork this repository
+2. Sign up on [Netlify](https://www.netlify.com/)
+3. Click "New site from Git"
+4. Choose your forked repository
+5. Deploy settings will be automatically configured by netlify.toml
+
+## Build
+
+To build the project:
+
+```bash
+npm run build
+```
+
+The build output will be in the `dist` directory.
+
+## Technologies Used
+
+- React
+- TypeScript
+- Vite
+- Styled Components
+- Netlify for hosting
 
 ## Installation and Setup
 
@@ -95,15 +144,6 @@ The control buttons are always visible at the bottom of the screen:
 - On smaller screens, the puzzle and reference image will stack vertically
 
 [Screenshot: Mobile view of the game interface]
-
-## Features
-- Drag and drop image upload
-- Automatic image splitting into 9 pieces
-- Real-time piece swapping
-- Progress verification
-- Helpful hint system
-- Responsive design for all devices
-- Smooth animations and transitions
 
 ## Technical Requirements
 - Modern web browser (Chrome, Firefox, Safari, Edge)
