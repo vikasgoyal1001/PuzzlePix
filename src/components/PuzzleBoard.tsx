@@ -7,7 +7,7 @@
  * to make the game more engaging and fun to play.
  */
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 // Styled components with my preferred modern aesthetic
@@ -435,7 +435,6 @@ interface PuzzleBoardProps {
 const PuzzleBoard = ({ pieces, originalImage, originalPieces }: PuzzleBoardProps) => {
   const [currentPieces, setCurrentPieces] = useState(pieces)
   const [draggedPiece, setDraggedPiece] = useState<number | null>(null)
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [correctPieces, setCorrectPieces] = useState<boolean[]>(Array(pieces.length).fill(false))
   const [showVerification, setShowVerification] = useState(false)
   const [showHints, setShowHints] = useState(false)
