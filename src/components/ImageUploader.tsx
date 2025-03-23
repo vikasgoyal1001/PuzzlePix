@@ -27,6 +27,16 @@ const UploadContainer = styled.div<{ isDragging: boolean }>`
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
+  @media (max-width: 768px) {
+    height: 250px;
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    height: 200px;
+    padding: 10px;
+  }
+
   &:hover {
     border-color: #4a90e2;
     background-color: #f8f8f8;
@@ -40,24 +50,57 @@ const UploadText = styled.p`
   font-size: 1.2em;
   text-align: center;
   line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 1.1em;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1em;
+    margin: 8px 0;
+  }
 `
 
 const UploadIcon = styled.div`
   font-size: 3em;
   color: #4a90e2;
   margin-bottom: 15px;
+
+  @media (max-width: 768px) {
+    font-size: 2.5em;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
 `
 
 const SupportedFormats = styled.p`
   font-size: 0.9em;
   color: #999;
   margin-top: 10px;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 0.8em;
+    margin-top: 8px;
+  }
 `
 
 const ErrorMessage = styled.p`
   color: #ff4444;
   margin-top: 10px;
   font-size: 0.9em;
+  text-align: center;
+  max-width: 100%;
+  padding: 0 10px;
+
+  @media (max-width: 480px) {
+    font-size: 0.8em;
+    margin-top: 8px;
+  }
 `
 
 interface ImageUploaderProps {

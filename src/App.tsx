@@ -24,6 +24,10 @@ const AppContainer = styled.div`
   background-color: #f0f2f5; // Soft background that's easy on the eyes
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `
 
 const Title = styled.h1`
@@ -35,6 +39,16 @@ const Title = styled.h1`
   
   // Adding a subtle text shadow for depth
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+  }
 `
 
 const StartButton = styled.button`
@@ -49,6 +63,19 @@ const StartButton = styled.button`
   margin-top: 20px;
   font-weight: 500;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: auto;
+  min-width: 200px;
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 1em;
+    min-width: 180px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    max-width: 300px;
+  }
 
   &:hover {
     background-color: #357abd;
@@ -72,6 +99,10 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const originalPiecesRef = useRef<string[]>([])
 
+  // Constants for puzzle dimensions
+  const PUZZLE_SIZE = 600 // Fixed size for the puzzle board
+  const GRID_SIZE = 3 // 3x3 grid
+
   // Handler for when a new image is uploaded
   const handleImageUpload = (imageUrl: string) => {
     setImage(imageUrl)
@@ -92,27 +123,43 @@ function App() {
       const ctx = canvas.getContext('2d')
       if (!ctx) return
 
-      // Set canvas dimensions to match the image
-      canvas.width = img.width
-      canvas.height = img.height
-      ctx.drawImage(img, 0, 0)
+      // Calculate the aspect ratio
+      const aspectRatio = img.width / img.height
 
-      // Split the image into a 3x3 grid
-      // Note: In the future, this could be adjustable based on difficulty
-      const pieces: string[] = []
-      const pieceWidth = img.width / 3
-      const pieceHeight = img.height / 3
+      // Set canvas dimensions based on aspect ratio
+      let scaledWidth, scaledHeight
+      if (aspectRatio > 1) {
+        // Landscape image
+        scaledWidth = PUZZLE_SIZE
+        scaledHeight = PUZZLE_SIZE / aspectRatio
+      } else {
+        // Portrait or square image
+        scaledHeight = PUZZLE_SIZE
+        scaledWidth = PUZZLE_SIZE * aspectRatio
+      }
+
+      // Set canvas dimensions
+      canvas.width = scaledWidth
+      canvas.height = scaledHeight
+
+      // Clear and draw the image
+      ctx.clearRect(0, 0, scaledWidth, scaledHeight)
+      ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight)
+
+      // Calculate piece dimensions
+      const pieceWidth = scaledWidth / GRID_SIZE
+      const pieceHeight = scaledHeight / GRID_SIZE
 
       // Create individual puzzle pieces
-      for (let y = 0; y < 3; y++) {
-        for (let x = 0; x < 3; x++) {
+      const pieces: string[] = []
+      for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
           const pieceCanvas = document.createElement('canvas')
           pieceCanvas.width = pieceWidth
           pieceCanvas.height = pieceHeight
           const pieceCtx = pieceCanvas.getContext('2d')
           
           if (pieceCtx) {
-            // Extract piece from main image
             pieceCtx.drawImage(
               canvas,
               x * pieceWidth,
@@ -129,19 +176,21 @@ function App() {
         }
       }
 
-      // Save the original configuration
+      // Save the original configuration and aspect ratio
       originalPiecesRef.current = [...pieces]
-
-      // Shuffle pieces using Fisher-Yates algorithm
-      const shuffledPieces = [...pieces]
-      for (let i = shuffledPieces.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffledPieces[i], shuffledPieces[j]] = [shuffledPieces[j], shuffledPieces[i]]
-      }
-
-      setPuzzlePieces(shuffledPieces)
+      setPuzzlePieces(shufflePieces(pieces))
       setIsPlaying(true)
     }
+  }
+
+  // Helper function to shuffle pieces
+  const shufflePieces = (pieces: string[]) => {
+    const shuffled = [...pieces]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
   }
 
   return (
